@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.delicoffee.deli.mapper.DeliOrderItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.delicoffee.deli.model.entity.DeliOrderItem">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="order_no" column="order_no" jdbcType="VARCHAR"/>
+            <result property="product_id" column="product_id" jdbcType="INTEGER"/>
+            <result property="product_name" column="product_name" jdbcType="VARCHAR"/>
+            <result property="product_img" column="product_img" jdbcType="VARCHAR"/>
+            <result property="unit_price" column="unit_price" jdbcType="INTEGER"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="total_price" column="total_price" jdbcType="INTEGER"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByOrderNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from deli.deli_order_item
+        where order_no = #{ordrNo};
+    </select>
+
+
+    <sql id="Base_Column_List">
+        id,order_no,product_id,
+        product_name,product_img,unit_price,
+        quantity,total_price,create_time,
+        update_time
+    </sql>
+</mapper>

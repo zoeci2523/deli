@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.delicoffee.deli.mapper.DeliOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.delicoffee.deli.model.entity.DeliOrder">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="order_no" column="order_no" jdbcType="VARCHAR"/>
+            <result property="user_id" column="user_id" jdbcType="INTEGER"/>
+            <result property="total_price" column="total_price" jdbcType="INTEGER"/>
+            <result property="receiver_name" column="receiver_name" jdbcType="VARCHAR"/>
+            <result property="receiver_mobile" column="receiver_mobile" jdbcType="VARCHAR"/>
+            <result property="receiver_address" column="receiver_address" jdbcType="VARCHAR"/>
+            <result property="order_status" column="order_status" jdbcType="INTEGER"/>
+            <result property="postage" column="postage" jdbcType="INTEGER"/>
+            <result property="payment_type" column="payment_type" jdbcType="INTEGER"/>
+            <result property="delivery_time" column="delivery_time" jdbcType="TIMESTAMP"/>
+            <result property="pay_time" column="pay_time" jdbcType="TIMESTAMP"/>
+            <result property="end_time" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from deli.deli_order
+        where order_no = #{orderNo}
+    </select>
+    <select id="selectForCustomer" resultMap="BaseResultMap" parameterType="integer">
+        select
+        <include refid="Base_Column_List"></include>
+        from deli.deli_order
+        where user_id = #{userId}
+        order by create_time desc
+    </select>
+
+    <sql id="Base_Column_List">
+        id,order_no,user_id,
+        total_price,receiver_name,receiver_mobile,
+        receiver_address,order_status,postage,
+        payment_type,delivery_time,pay_time,
+        end_time,create_time,update_time
+    </sql>
+
+</mapper>

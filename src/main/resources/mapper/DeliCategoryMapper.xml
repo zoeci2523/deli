@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.delicoffee.deli.mapper.DeliCategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.delicoffee.deli.model.entity.DeliCategory">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="parent_id" column="parent_id" jdbcType="INTEGER"/>
+            <result property="order_num" column="order_num" jdbcType="INTEGER"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,type,
+        parent_id,order_num,create_time,
+        update_time
+    </sql>
+    <select id="selectCategoriesByParentId" parameterType="int" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from deli.deli_category
+        where parent_id = #{parentId}
+    </select>
+</mapper>

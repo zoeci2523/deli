@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.delicoffee.deli.mapper.DeliCartMapper">
+
+    <resultMap id="BaseResultMap" type="com.delicoffee.deli.model.entity.DeliCart">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="product_id" column="product_id" jdbcType="INTEGER"/>
+            <result property="user_id" column="user_id" jdbcType="INTEGER"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="selected" column="selected" jdbcType="INTEGER"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectList" resultType="com.delicoffee.deli.vo.CartVO" parameterType="java.lang.Integer">
+        select c.id as id, p.id as product_id, c.user_id as user_id,
+               c.quantity as quantity, c.selected as selected, p.price as price,
+               p.name as product_name, p.image as product_image
+        from deli.deli_cart c left join deli.deli_product p
+            on c.product_id = p.id
+        where c.user_id = #{userId}
+        and p.status = 1
+    </select>
+    <select id="selectCartByUserIdAndProductId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from deli.deli_cart
+        where user_id = #{userId}
+        and product_id = #{productId}
+    </select>
+    <select id="selectOrNot" parameterType="map" resultType="java.lang.Integer">
+        update deli.deli_cart
+        set selected = #{selected}
+        where user_id = #{userId}
+        <if test="productId != null">
+            and product_id = #{productId}
+        </if>
+    </select>
+
+    <sql id="Base_Column_List">
+        id,product_id,user_id,
+        quantity,selected,create_time,
+        update_time
+    </sql>
+</mapper>

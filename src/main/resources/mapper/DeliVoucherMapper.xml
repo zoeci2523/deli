@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.delicoffee.deli.mapper.DeliVoucherMapper">
+
+    <resultMap id="BaseResultMap" type="com.delicoffee.deli.model.entity.DeliVoucher">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="product_id" column="product_id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="sub_title" column="sub_title" jdbcType="VARCHAR"/>
+            <result property="rules" column="rules" jdbcType="VARCHAR"/>
+            <result property="stock" column="stock" jdbcType="INTEGER"/>
+            <result property="pay_value" column="pay_value" jdbcType="BIGINT"/>
+            <result property="actual_value" column="actual_value" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="begin_time" column="begin_time" jdbcType="TIMESTAMP"/>
+            <result property="end_time" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,product_id,title,
+        sub_title,rules,stock,
+        pay_value,actual_value,type,
+        status,begin_time,end_time,
+        create_time,update_time
+    </sql>
+
+    <select id="queryVoucherOfShop" resultType="com.delicoffee.deli.model.entity.DeliVoucher" parameterType="java.lang.Long">
+        SELECT
+            v.`id`, v.`product_id`, v.`title`, v.`sub_title`, v.`rules`, v.`pay_value`,
+            v.`actual_value`, v.`type`, sv.`stock` , sv.begin_time , sv.end_time
+        FROM deli.deli_voucher v
+                 LEFT JOIN deli.deli_seckill_voucher sv ON v.id = sv.voucher_id
+        WHERE v.product_id = #{productId} AND v.status = 1
+    </select>
+</mapper>
