@@ -34,7 +34,9 @@ public class Constant {
     // 与缓存相关的
     public static final Long CACHE_NULL_TTL = 100L;
     public static final Long CACHE_CATEGORY_TTL = 30L;
+    public static final Long CACHE_PRODUCT_TTL = 120L;
     public static final String CACHE_CATEGORY_KEY = "cache:category:";
+    public static final String CACHE_PRODUCT_KEY = "cache:product:";
     public static final String SECKILL_STOCK_KEY = "seckill:stock:";
 
     // 互斥锁
@@ -58,6 +60,13 @@ public class Constant {
     @Value("${file.upload.dir}")
     public void setFileUploadDir(String fileUploadDir){
         FILE_UPLOAD_DIR = fileUploadDir;
+    }
+
+    public static String PRODUCT_IMPORT_FILE;
+    // 静态资源无法被直接获取，需要写set()获取
+    @Value("${product.excel.upload.dir}")
+    public void setProductImportFile(String fileUploadDir){
+        PRODUCT_IMPORT_FILE = fileUploadDir;
     }
 
     // 订单状态

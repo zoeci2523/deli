@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
 * @author fengxiaoha
@@ -42,15 +43,6 @@ public class DeliProductServiceImpl extends ServiceImpl<DeliProductMapper, DeliP
     public DeliProduct detail(Integer id){
         // TODO 取消注释，直接访问数据库
         DeliProduct product = productMapper.selectByPrimaryKey(id);
-
-        // TODO 取消注释，设置空值解决缓存穿透问题
-//        DeliProduct product = cacheClient.queryWithPassThrough(Constant.CACHE_CATEGORY_KEY, id,
-//                DeliProduct.class, id1 -> productMapper.selectByPrimaryKey(id1), Constant.CACHE_CATEGORY_TTL, TimeUnit.SECONDS);
-
-        // TODO 取消注释，逻辑过期解决缓存击穿问题
-//        DeliProduct product = cacheClient.queryWithLogicalExpire(Constant.CACHE_CATEGORY_KEY, id,
-//                DeliProduct.class, id1 -> productMapper.selectByPrimaryKey(id1), Constant.CACHE_CATEGORY_TTL, TimeUnit.SECONDS);
-
         return product;
     }
 
@@ -81,7 +73,19 @@ public class DeliProductServiceImpl extends ServiceImpl<DeliProductMapper, DeliP
         }else {
             PageHelper.startPage(productListReq.getPageNum(),productListReq.getPageSize());
         }
+
+        // TODO 选择商品数据加载方式
+        // 取消注释即使用redis缓存，并设置空值解决缓存穿透问题
+//        List<DeliProduct> productList = cacheClient.queryWithPassThrough(Constant.CACHE_PRODUCT_KEY, productListQuery,
+//                List.class, query -> productMapper.selectList(query), Constant.CACHE_PRODUCT_TTL, TimeUnit.SECONDS);
+
+        // 取消注释即使用redis缓存，并逻辑过期解决缓存击穿问题
+//        List<DeliProduct> productList = cacheClient.queryWithLogicalExpire(Constant.CACHE_PRODUCT_KEY, productListQuery,
+//                List.class, query -> productMapper.selectList(query), Constant.CACHE_PRODUCT_TTL, TimeUnit.SECONDS);
+
+        // 取消注释即直接从数据库取出，不使用缓存
         List<DeliProduct> productList = productMapper.selectList(productListQuery);
+
         PageInfo pageInfo = new PageInfo(productList);
         return pageInfo;
     }
